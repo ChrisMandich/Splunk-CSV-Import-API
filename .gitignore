@@ -1,0 +1,2 @@
+# Specify ignore files that may contain local or private information
+Private/config.json

@@ -1,0 +1,4 @@
+{
+    "URI":"https://splunksh.domain.com:8089",
+    "SkipCertificateCheck":"True"
+}
