@@ -1,4 +1,4 @@
-function Set-SplunkFieldEval{
+function Set-SplunkFieldExtract{
     <#
         .SYNOPSIS
             This function can be used to Set all Splunk Alias' defined on the Splunk Server
@@ -23,8 +23,9 @@ function Set-SplunkFieldEval{
             [Uri]$Uri = $Global:Uri,
             [Bool]$SkipCertificateCheck = $Global:SkipCertificateCheck,
             [String]$SplunkApp = $(Throw "Splunk App Not Defined"),
-            [String]$Value = $(Throw "Eval string value is not defined"),
-            [String]$Name = $(Throw "Eval Name is not defined"),
+            [String]$Value = $(Throw "Extract string value is not defined"),
+            [String]$Name = $(Throw "Extract Name is not defined"),
+            [String]$Type = $(Throw "Extract Type is not defined"),
             [String]$Sourcetype = $(Throw "Sourcetype is not defined.")
         )
         Begin{
@@ -52,7 +53,7 @@ function Set-SplunkFieldEval{
             if ($Uri){
                 # Specified Splunk App
                 # https://localhost:8089//servicesNS/admin/search/data/props/fieldaliases
-                [Uri] $SplunkAppUri = [String]$Uri.AbsoluteUri + "servicesNS/admin/" + $SplunkApp + "/data/props/calcfields" 
+                [Uri] $SplunkAppUri = [String]$Uri.AbsoluteUri + "servicesNS/admin/" + $SplunkApp + "/data/props/extractions" 
                 $params.Add('Uri',$SplunkAppUri)
             }
             else{
@@ -66,7 +67,7 @@ function Set-SplunkFieldEval{
                 $data = "name=$Name;"
             }
             else{
-                Write-Error -Message "Eval Name not provided"
+                Write-Error -Message "Extract Name not provided"
             }
             If ($PSBoundParameters.ContainsKey('Sourcetype')){
                 $data += "stanza=$Sourcetype;"
@@ -74,12 +75,18 @@ function Set-SplunkFieldEval{
             else{
                 Write-Error -Message "Sourcetype not provided"
             }
+            If ($PSBoundParameters.ContainsKey('Type')){
+                $data += "type=$Type;"
+            }
+            else{
+                Write-Error -Message "Extract Value not provided"
+            }
             If ($PSBoundParameters.ContainsKey('Value')){
                 $data += "value=$Value;"
                 $params.Add('Body',$data)
             }
             else{
-                Write-Error -Message "Eval Value not provided"
+                Write-Error -Message "Extract Value not provided"
             }
             # Invoke Rest Method
             try{
