@@ -32,22 +32,22 @@ function Set-SplunkKOConfig{
         }
 
         # Set Alias' based on those defined in the CSV. 
-        $content | Where-Object type -eq "alias" | Group-Object name, sourcetype, splunkapp | ForEach-Object {
+        $content | Where-Object type -eq "alias" | Group-Object name, Stanza, splunkapp | ForEach-Object {
             $hash = @{}
             $_.Group | ForEach-Object {
                 $hash.Add($_.aliasname, $_.aliasvalue) 
                 $splunkapp =  $_.SplunkApp
                 $name = $_.name
-                $sourcetype = $_.sourcetype
+                $Stanza = $_.Stanza
             }
-            Set-SplunkFieldAlias -Credential $Credential -Uri $Uri.AbsoluteUri -Name $name -Value $hash -Sourcetype $sourcetype -SplunkApp $splunkapp -SkipCertificateCheck $SkipCertificateCheck
+            Set-SplunkFieldAlias -Credential $Credential -Uri $Uri.AbsoluteUri -Name $name -Value $hash -Stanza $Stanza -SplunkApp $splunkapp -SkipCertificateCheck $SkipCertificateCheck
         }
 
         $content | Where-Object type -eq "eval" | ForEach-Object {
-            Set-SplunkFieldEval -Credential $Credential -Uri $Uri.AbsoluteUri -SkipCertificateCheck $SkipCertificateCheck -SplunkApp $_.splunkapp -name $_.name -Value "$($_.evalvalue)" -Sourcetype "$($_.sourcetype)"
+            Set-SplunkFieldEval -Credential $Credential -Uri $Uri.AbsoluteUri -SkipCertificateCheck $SkipCertificateCheck -SplunkApp $_.splunkapp -name $_.name -Value "$($_.evalvalue)" -Stanza "$($_.Stanza)"
         }
 
         $content | Where-Object type -eq "extract" | ForEach-Object {
-            Set-SplunkFieldExtract -Name $_.name -Sourcetype $_.sourcetype -SplunkApp $_.splunkapp -Type $_.extracttype -Value $_.extractvalue -Credential $Credential -SkipCertificateCheck $SkipCertificateCheck -Uri $Uri.AbsoluteUri
+            Set-SplunkFieldExtract -Name $_.name -Stanza $_.Stanza -SplunkApp $_.splunkapp -Type $_.extracttype -Value $_.extractvalue -Credential $Credential -SkipCertificateCheck $SkipCertificateCheck -Uri $Uri.AbsoluteUri
         }
 }

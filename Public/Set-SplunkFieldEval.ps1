@@ -11,7 +11,7 @@ function Set-SplunkFieldEval{
         .PARAMETER SkipCertificateCheck
             Allows SkipCertificateCheck Certificates to be used
         .EXAMPLE
-            Set-SplunkFieldAlias -Credential $creds -SplunkApp "search" -AliasHashTable @{test1="field1";} -AliasName "cim_v1" -Sourcetype "syslog"
+            Set-SplunkFieldAlias -Credential $creds -SplunkApp "search" -AliasHashTable @{test1="field1";} -AliasName "cim_v1" -Stanza "syslog"
         #>
         [CmdletBinding()]
         [OutputType([psobject])]
@@ -25,7 +25,7 @@ function Set-SplunkFieldEval{
             [String]$SplunkApp = $(Throw "Splunk App Not Defined"),
             [String]$Value = $(Throw "Eval string value is not defined"),
             [String]$Name = $(Throw "Eval Name is not defined"),
-            [String]$Sourcetype = $(Throw "Sourcetype is not defined.")
+            [String]$Stanza = $(Throw "Stanza is not defined.")
         )
         Begin{
             # Provide Entrance Context
@@ -60,19 +60,19 @@ function Set-SplunkFieldEval{
                 Write-Error "Error creating URI"
             }
 
-            # The following code generates a data payload to be imported into Splunk. The data payload needs to include: Alias Name, Sourcetype and Alias'. 
-            # The Data Payload is formatted in the following structure: "name=<AliasName>;stanza=<Sourcetype>;alias.test1=test2"
+            # The following code generates a data payload to be imported into Splunk. The data payload needs to include: Alias Name, Stanza and Alias'. 
+            # The Data Payload is formatted in the following structure: "name=<AliasName>;stanza=<Stanza>;alias.test1=test2"
             If ($PSBoundParameters.ContainsKey('Name')){
                 $data = "name=$Name;"
             }
             else{
                 Write-Error -Message "Eval Name not provided"
             }
-            If ($PSBoundParameters.ContainsKey('Sourcetype')){
-                $data += "stanza=$Sourcetype;"
+            If ($PSBoundParameters.ContainsKey('Stanza')){
+                $data += "stanza=$Stanza;"
             }
             else{
-                Write-Error -Message "Sourcetype not provided"
+                Write-Error -Message "Stanza not provided"
             }
             If ($PSBoundParameters.ContainsKey('Value')){
                 $data += "value=$Value;"
