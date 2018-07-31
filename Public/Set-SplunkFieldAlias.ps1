@@ -76,7 +76,7 @@ function Set-SplunkFieldAlias{
             }
             If ($PSBoundParameters.ContainsKey('Value')){
                 foreach ($h in $Value.Keys){
-                    $data += "alias.$h=$($Value.item($h));"
+                    $data += "alias.$($Value.item($h))=$h;"
                 }
                 $params.Add('Body',$data)
             }

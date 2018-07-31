@@ -1,0 +1,9 @@
+name,stanza,type,splunkapp,aliasname,aliasvalue,evalvalue,extracttype,extractvalue
+cim_v1,syslog,alias,TA-splunkapp,src_category,category,,,
+cim_v1,syslog,alias,TA-splunkapp,severity,severity_id,,,
+cim_v1,syslog,alias,TA-splunkapp,dest_ip,dest,,,
+cim_v1,syslog,alias,TA-splunkapp,src_ip,src,,,
+cim_v1,syslog,alias,TA-splunkapp,subject,signature,,,
+action,syslog,eval,TA-splunkapp,,,"""deferred""",,
+ids_type,syslog,eval,TA-splunkapp,,,"""deception""",,
+cim_dvc,syslog,extract,TA-splunkapp,,,,EXTRACT,"\""app\""\:\""(?<dvc>[^\""]+)"
